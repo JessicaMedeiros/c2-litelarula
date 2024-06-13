@@ -18,12 +18,19 @@ public class Autor {
     private int birth_year;
     private int death_year;
 
+    @Column(unique = true)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER) // Eager fetching for Livro
-    private Livro livro;
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private List<Livro> livros = new ArrayList<>();
 
     public Autor() {
+    }
+
+    public Autor(int birth_year, int death_year, String name) {
+        this.birth_year = birth_year;
+        this.death_year = death_year;
+        this.name = name;
     }
 
     public Long getId() {
@@ -50,12 +57,12 @@ public class Autor {
         this.death_year = death_year;
     }
 
-    public Livro getLivro() {
-        return livro;
+    public List<Livro> getLivros() {
+        return livros;
     }
 
-    public void setLivro(Livro livro) {
-        this.livro = livro;
+    public void setLivros(List<Livro> livros) {
+        this.livros = livros;
     }
 
     public String getName() {
@@ -68,9 +75,10 @@ public class Autor {
 
     @Override
     public String toString() {
-        return "autor='" + name + '\'' +
-                ", birth_year=" + birth_year +
-                ", death_year=" + death_year + '\'';
+        return "autor='" + name + '\n' +
+                ", birth_year=" + birth_year + '\n' +
+                ", death_year=" + death_year + '\n' +
+                ", Livros =" +  livros + '\'';
     }
 
 }

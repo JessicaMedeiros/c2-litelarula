@@ -1,5 +1,5 @@
 package com.alura.literalura.service;
-import com.alura.literalura.model.ApiResults;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,23 +29,11 @@ public class ConsumoAPI {
                 throw new RuntimeException(e);
             }
 
-      //  String json = response.body();
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonNode = mapper.readTree(response.body());
-        String json = String.valueOf(jsonNode.get("results"));
 
-        //System.out.println("results" + algo);
-        int startingIndex = 1; // Exclude the first character
-        int endingIndex = json.length() - 1; // Exclude the last character
+        JsonNode json = mapper.readTree(response.body()).get("results").get(0);
 
-        String modifiedString = json.substring(startingIndex, endingIndex);
-
-
-        System.out.println("Saindo..json." + json);
-        System.out.println("Saindo..modifiedString." + modifiedString);
-
-
-            return modifiedString;
+        return json.toString();
         }
 }
