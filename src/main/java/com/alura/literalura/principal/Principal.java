@@ -9,6 +9,7 @@ import com.alura.literalura.service.ConsumoAPI;
 import com.alura.literalura.service.ConverteDados;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.time.Year;
 import java.util.*;
 
 public class Principal {
@@ -86,10 +87,13 @@ public class Principal {
             repositorio.save(livro);
         } else {
             Autor autor = new Autor(dados.authors().get(0).birth_year(), dados.authors().get(0).death_year(), dados.authors().get(0).name());
-            autorRepositorio.save(autor); // Save the new Autor if not found
+            autorRepositorio.save(autor);
             livro.setAutor(autor);
             repositorio.save(livro);
         }
+
+        System.out.println("Livro salvo com sucesso no banco de dados\n");
+        System.out.println(livro);
 
     }
 
@@ -138,18 +142,28 @@ public class Principal {
     private void buscarAutoresVivosEmDeterminadoPeriodo(){
         System.out.println("Qual o ano?");
         int ano = leitura.nextInt();
+        int anoAtual = Year.now().getValue();
+
+        if (ano < 1200 || ano > anoAtual) {
+            System.out.println("Valor " + ano + " é inválido. Deve ser maior que 1200 e menor que o ano atual.");
+            return;
+        }
+
         List<Autor> autoresEncontrados = autorRepositorio.autoresVivosEmDeterminadoAno(ano);
-        autoresEncontrados.forEach(e ->
-                System.out.printf("\n\nAutor: %s \nAno de nascimento: %s \nAno de falecimento: %s \n\n",
-                        e.getName() , e.getBirth_year() , e.getDeath_year() ));
+        autoresEncontrados.stream()
+                .forEach(System.out::println);
+
+
     }
 
     public void buscarLivrosEmDeterminadosIdioma() {
-        System.out.println("Insira o idioma para realizar a busca? " +
-                "\nes - espanhol" +
-                "\nen - inglês" +
-                "\nfr - francês" +
-                "\npt - português");
+
+        System.out.println("""
+                     Insira o idioma para realizar a busca?
+                        es - espanhol 
+                        en - inglês 
+                        fr - francês 
+                        pt - português""");
 
         var idioma = leitura.nextLine();
 
@@ -163,7 +177,6 @@ public class Principal {
             System.out.printf("Encontrados %d livros no idioma %s:\n", contagem, idioma);
 
             livrosEncontrados.stream()
-                    .map(Livro::getTitle)
                     .forEach(System.out::println);
 
         }

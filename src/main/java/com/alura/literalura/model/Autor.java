@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "autor")
@@ -73,12 +74,21 @@ public class Autor {
         this.name = name;
     }
 
+
     @Override
     public String toString() {
-        return "autor='" + name + '\n' +
-                ", birth_year=" + birth_year + '\n' +
-                ", death_year=" + death_year + '\n' +
-                ", Livros =" +  livros + '\'';
+        List<String> titulos = livros.stream()
+                .map(livro -> livro.getTitle())
+                .collect(Collectors.toList());
+
+        return "---------------------------\n" +
+                "Autor: " + name + "\n" +
+                "Data de nascimento: " + birth_year + "\n" +
+                "Falecimento: " + death_year + "\n" +
+                "Livros: " + titulos + "\n" +
+                "---------------------------\n";
     }
+
+
 
 }

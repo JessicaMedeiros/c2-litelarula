@@ -14,7 +14,6 @@ public class ConsumoAPI {
 
     public String obterDados(String endereco) throws JsonProcessingException {
 
-        System.out.println("Saindo..enderecoenderecoendereco." + endereco);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(endereco))
@@ -35,5 +34,5 @@ public class ConsumoAPI {
         JsonNode json = mapper.readTree(response.body()).get("results").get(0);
 
         return json.toString();
-        }
+    }
 }
